@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>App Engine NDB gotcha PickleProperty default value</title>
+    <meta name="viewport" content="width=device-width">
+
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+
+  </head>
+  <body>
+
+    <div class="site">
+      <div class="header">
+        <h1 class="title"><a href="/">QED.US</a></h1>
+        <a class="extra" href="/">home</a>
+      </div>
+
+      <h2>App Engine NDB gotcha PickleProperty default value</h2>
+<p class="meta">29 Apr 2012</p>
+
+<div class="post">
+<p>App Engine’s python NDB code is amazing; created by a guy who really knows how to use Python well. It’s been really nice to follow its progress to see how a master developer works. Thank’s Guido &amp; Google.   I though I would post here to let you all know of a trap I fell into that reduces the usefulness of PickleProperty default parameter.</p>
+
+<p>The last line fails as is expected; test<em>pickle</em>two takes on the key-value pair ‘what’: ‘up’. However this fact means that I can only ever instantiate one test_value per web request if I don’t want to pollute my default value.</p>
+
+<p>The thing is that ndb.PickleProperty is very likely to hold a mutable python object as that’s where it’s useful.</p>
+
+<p>I wonder if there is a simple way I could get a fresh mutable default value for ndb.PickleProperty each time I instantiate the class TestPickle?</p>
+
+</div>
+
+
+      <div class="footer">
+        <div class="contact">
+          <p>
+          Jonathan Gillham
+          </p>
+        </div>
+        <div class="contact">
+          <p>
+          <a href="https://github.com/qedus">github.com/qedus</a><br />
+          <a href="https://twitter.com/jongillham">twitter.com/jongillham</a><br />
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </body>
+</html>

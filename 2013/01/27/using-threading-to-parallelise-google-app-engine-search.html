@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Using threading to parallelise Google App Engine Search Service</title>
+    <meta name="viewport" content="width=device-width">
+
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+
+  </head>
+  <body>
+
+    <div class="site">
+      <div class="header">
+        <h1 class="title"><a href="/">QED.US</a></h1>
+        <a class="extra" href="/">home</a>
+      </div>
+
+      <h2>Using threading to parallelise Google App Engine Search Service</h2>
+<p class="meta">27 Jan 2013</p>
+
+<div class="post">
+<p>I ran into a performance/cost bottleneck with some of my code that uses the experimental App Engine Search Service. It currently does not let you asynchronously put documents into its search indexes, therefore I was getting the following display in App Stats when trying to insert 20 documents at a time:</p>
+
+<p>The whole task took over 4 seconds to execute with each document insertion being done sequentially. Note the datastore<em>v3.Put commands also add 20 entities at a time but use ndb.put</em>multi_async() to ensure they only use one RPC. It is executed in milliseconds.</p>
+
+<p>With the python 2.7 runtime I changed my code to use threading.Thread for each of the document insertions and saw a big performance improvement:</p>
+
+<p>The task now takes under 3 seconds which means I can run with fewer instances which in turn costs me less. Ideally there would be a search.Index(name=’index-name’).put<em>multi</em>async() in the Search Service API but this is the next best thing.</p>
+
+</div>
+
+
+      <div class="footer">
+        <div class="contact">
+          <p>
+          Jonathan Gillham
+          </p>
+        </div>
+        <div class="contact">
+          <p>
+          <a href="https://github.com/qedus">github.com/qedus</a><br />
+          <a href="https://twitter.com/jongillham">twitter.com/jongillham</a><br />
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </body>
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>App Engine austerity - The composite key</title>
+    <meta name="viewport" content="width=device-width">
+
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+
+  </head>
+  <body>
+
+    <div class="site">
+      <div class="header">
+        <h1 class="title"><a href="/">QED.US</a></h1>
+        <a class="extra" href="/">home</a>
+      </div>
+
+      <h2>App Engine austerity - The composite key</h2>
+<p class="meta">08 Sep 2011</p>
+
+<div class="post">
+<p>As anyone using App Engine knows, the age of austerity is almost upon us. Terrifying for a lot of people that have built their business on it. See Brandon Wirtz and many others reaction to the massive price increases. I seem to remember Ikai Lan, App Engine team member, predicting a year ago that if anything the price would go down in the future; a pretty safe prediction without hindsight.</p>
+
+<p>Google has provided us with some tips to help us optimise our use of App Engine. I thought I would provide a technique here of using a composite key to reduce the cost of datastore operations and latency by only using an entity’s key name to store key-value pairs.</p>
+
+<p>Problem</p>
+
+<p>I have a sequence of events that I want to store in my GAE datastore. Each event consists of a unique timestamp and a small payload of fixed size. My app selects 50 - 60 of these events at a time from the datastore in chronological order.</p>
+
+<p>What are my options for least latency and cost using GAE?</p>
+
+<p>Option 1 - Bad:</p>
+
+<p>For each event create an entity in the datastore with a timestamp and payload:</p>
+
+<p>This is probably the most intuitive way. However according to datastore best practices, it is best to perform your gets/queries via entity key if possible.</p>
+
+<p>Option 2 - Good:</p>
+
+<p>Use the timestamp as the entity key. This should increase the query speed as GAE is optimised for searching by keys. To make this work I will need to change the timestamp from the datetime property type to a str or long. In doing so I will need to select my timestamp precision and millisecond precision is more than good enough for my use case to avoid duplicate keys:</p>
+
+<p>The advantages of this method are that I directly query the key and the only index I need is the default key index.</p>
+
+<p>Option 3 - Great:</p>
+
+<p>As we can make the payload fixed width, why not store the entire thing in a key? All we would then need to do is fetch the entities key and decode to get all the information we need:</p>
+
+<p>Now we only need to do a keys_only query which is much cheaper and faster than pulling the whole entity from the datastore.</p>
+
+<p>Caveats:</p>
+
+<p>It’s your responsibility to make sure your data is always a fixed size.
+It might be tricky to perform &gt;= queries instead of &gt; queries depending on the ASCII/UNICODE character precedence.
+Scalability - I group sequences of events under different parents therefore allowing me to know each users sequence of events will not collide with other users.
+When I get around to it I’ll create some stats to get objective evidence that this really is a useful technique. However, subjectively this works well.</p>
+
+</div>
+
+
+      <div class="footer">
+        <div class="contact">
+          <p>
+          Jonathan Gillham
+          </p>
+        </div>
+        <div class="contact">
+          <p>
+          <a href="https://github.com/qedus">github.com/qedus</a><br />
+          <a href="https://twitter.com/jongillham">twitter.com/jongillham</a><br />
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </body>
+</html>

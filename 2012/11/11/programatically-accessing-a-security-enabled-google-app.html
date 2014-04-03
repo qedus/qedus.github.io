@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Programatically accessing a security enabled Google App Engine dev server using Apache HttpClient</title>
+    <meta name="viewport" content="width=device-width">
+
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+
+  </head>
+  <body>
+
+    <div class="site">
+      <div class="header">
+        <h1 class="title"><a href="/">QED.US</a></h1>
+        <a class="extra" href="/">home</a>
+      </div>
+
+      <h2>Programatically accessing a security enabled Google App Engine dev server using Apache HttpClient</h2>
+<p class="meta">11 Nov 2012</p>
+
+<div class="post">
+<p>Martin Krasser has an article on how to programatically login your Java client on both production and development Google App Engine servers. It’s a couple of years old now and the development server section advice no longer works. Here’s how to make it work again with Apache HttpClient:</p>
+
+<p>Now can use that httpClient to access any protected resources on your development server. Change the admin value from False to True if you need admin access. Make sure to change the port (8080) to whatever port your development server is running on. Note that I turn HANDLE_REDIRECTS to false as in my case I do not want to be redirected to http://localhost:8080/ when I submit the form; you may want to.</p>
+
+</div>
+
+
+      <div class="footer">
+        <div class="contact">
+          <p>
+          Jonathan Gillham
+          </p>
+        </div>
+        <div class="contact">
+          <p>
+          <a href="https://github.com/qedus">github.com/qedus</a><br />
+          <a href="https://twitter.com/jongillham">twitter.com/jongillham</a><br />
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </body>
+</html>
