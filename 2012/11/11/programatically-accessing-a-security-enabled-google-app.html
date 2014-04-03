@@ -25,9 +25,25 @@
 <p class="meta">11 Nov 2012</p>
 
 <div class="post">
-<p>Martin Krasser has an article on how to programatically login your Java client on both production and development Google App Engine servers. It’s a couple of years old now and the development server section advice no longer works. Here’s how to make it work again with Apache HttpClient:</p>
+<p><a href="http://krasserm.blogspot.co.uk/2010/01/accessing-security-enabled-google-app.html">Martin Krasser</a> has an article on how to programatically login your Java client on both production and development Google App Engine servers. It&#39;s a couple of years old now and the development server section advice no longer works. Here&#39;s how to make it work again with Apache HttpClient:</p>
 
-<p>Now can use that httpClient to access any protected resources on your development server. Change the admin value from False to True if you need admin access. Make sure to change the port (8080) to whatever port your development server is running on. Note that I turn HANDLE_REDIRECTS to false as in my case I do not want to be redirected to http://localhost:8080/ when I submit the form; you may want to.</p>
+<div class="highlight"><pre><code class="java"><span class="n">HttpPost</span> <span class="n">httpPost</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HttpPost</span><span class="o">(</span><span class="s">&quot;http://localhost:8080/_ah/login&quot;</span><span class="o">);</span>
+<span class="n">httpPost</span><span class="o">.</span><span class="na">setHeader</span><span class="o">(</span><span class="s">&quot;Content-Type&quot;</span><span class="o">,</span> <span class="s">&quot;application/x-www-form-urlencoded&quot;</span><span class="o">);</span>
+ 
+<span class="n">List</span> <span class="o">&lt;</span><span class="n">NameValuePair</span><span class="o">&gt;</span> <span class="n">parameters</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span> <span class="o">&lt;</span><span class="n">NameValuePair</span><span class="o">&gt;();</span>
+<span class="n">parameters</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="n">BasicNameValuePair</span><span class="o">(</span><span class="s">&quot;email&quot;</span><span class="o">,</span> <span class="s">&quot;test@example.com&quot;</span><span class="o">));</span>
+<span class="n">parameters</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="n">BasicNameValuePair</span><span class="o">(</span><span class="s">&quot;continue&quot;</span><span class="o">,</span> <span class="s">&quot;http://localhost:8080/&quot;</span><span class="o">));</span>
+<span class="n">parameters</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="n">BasicNameValuePair</span><span class="o">(</span><span class="s">&quot;admin&quot;</span><span class="o">,</span> <span class="s">&quot;False&quot;</span><span class="o">));</span>
+<span class="n">parameters</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="n">BasicNameValuePair</span><span class="o">(</span><span class="s">&quot;action&quot;</span><span class="o">,</span> <span class="s">&quot;Login&quot;</span><span class="o">));</span>
+ 
+<span class="n">UrlEncodedFormEntity</span> <span class="n">entity</span> <span class="o">=</span> <span class="k">new</span> <span class="n">UrlEncodedFormEntity</span><span class="o">(</span><span class="n">parameters</span><span class="o">,</span> <span class="n">HTTP</span><span class="o">.</span><span class="na">UTF_8</span><span class="o">);</span>
+<span class="n">httpPost</span><span class="o">.</span><span class="na">setEntity</span><span class="o">(</span><span class="n">entity</span><span class="o">);</span>
+<span class="n">HttpClient</span> <span class="n">httpClient</span> <span class="o">=</span> <span class="k">new</span> <span class="n">DefaultHttpClient</span><span class="o">();</span>
+<span class="n">httpClient</span><span class="o">.</span><span class="na">getParams</span><span class="o">().</span><span class="na">setBooleanParameter</span><span class="o">(</span><span class="n">ClientPNames</span><span class="o">.</span><span class="na">HANDLE_REDIRECTS</span><span class="o">,</span> <span class="kc">false</span><span class="o">);</span>
+<span class="n">HttpResponse</span> <span class="n">resp</span> <span class="o">=</span> <span class="n">httpClient</span><span class="o">.</span><span class="na">execute</span><span class="o">(</span><span class="n">httpPost</span><span class="o">);</span>
+</code></pre></div>
+
+<p>Now can use that httpClient to access any protected resources on your development server. Change the <em>admin</em> value from <em>False</em> to <em>True</em> if you need admin access. Make sure to change the port (8080) to whatever port your development server is running on. Note that I turn <em>HANDLE_REDIRECTS</em> to <em>false</em> as in my case I do not want to be redirected to http://localhost:8080/ when I submit the form; you may want to.</p>
 
 </div>
 

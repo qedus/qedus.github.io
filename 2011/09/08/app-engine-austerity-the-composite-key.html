@@ -25,40 +25,81 @@
 <p class="meta">08 Sep 2011</p>
 
 <div class="post">
-<p>As anyone using App Engine knows, the age of austerity is almost upon us. Terrifying for a lot of people that have built their business on it. See Brandon Wirtz and many others reaction to the massive price increases. I seem to remember Ikai Lan, App Engine team member, predicting a year ago that if anything the price would go down in the future; a pretty safe prediction without hindsight.</p>
+<p>As anyone using App Engine knows, the age of austerity is almost upon us. Terrifying for a lot of people that have built their business on it. See <a href="https://groups.google.com/forum/#!topic/google-appengine/dpCFQ3V8BQc">Brandon Wirtz</a> and <a href="https://groups.google.com/d/topic/google-appengine/obfGjbIkOTI/overview">many others</a> reaction to the massive price increases. I seem to remember <a href="https://plus.google.com/107011265359512082824">Ikai Lan</a>, App Engine team member, predicting a year ago that if anything the price would go down in the future; a pretty safe prediction without hindsight.</p>
 
-<p>Google has provided us with some tips to help us optimise our use of App Engine. I thought I would provide a technique here of using a composite key to reduce the cost of datastore operations and latency by only using an entity’s key name to store key-value pairs.</p>
+<p><img src="http://2.bp.blogspot.com/-2bca6DfjA3o/TmBVPmiV3BI/AAAAAAAAAZc/0LNKu2YD2Ho/s1600/great_depression%25202.jpg" alt="Great Depression"></p>
 
-<p>Problem</p>
+<p>Google has provided us with some <a href="http://code.google.com/appengine/articles/managing-resources.html">tips</a> to help us optimise our use of App Engine. I thought I would provide a technique here of using a composite key to reduce the cost of datastore operations and latency by only using an entity&#39;s key name to store key-value pairs.</p>
 
-<p>I have a sequence of events that I want to store in my GAE datastore. Each event consists of a unique timestamp and a small payload of fixed size. My app selects 50 - 60 of these events at a time from the datastore in chronological order.</p>
+<h2>Problem</h2>
+
+<p>I have a sequence of events that I want to store in my GAE datastore. Each event consists of a unique timestamp and a small payload of <em>fixed size</em>. My app selects 50 - 60 of these events at a time from the datastore in chronological order.</p>
 
 <p>What are my options for least latency and cost using GAE?</p>
 
-<p>Option 1 - Bad:</p>
+<h3>Option 1 - Bad:</h3>
 
 <p>For each event create an entity in the datastore with a timestamp and payload:</p>
 
+<div class="highlight"><pre><code class="python"><span class="c"># Entity model</span>
+<span class="k">class</span> <span class="nc">Event</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>    
+  <span class="n">timestamp</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">DateTimeProperty</span><span class="p">()</span>    
+  <span class="n">payload</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">StringProperty</span><span class="p">(</span><span class="n">indexed</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+  
+<span class="c"># Query example where I want all entities with timestamps &gt; 100000</span>
+<span class="n">query</span> <span class="o">=</span> <span class="n">Event</span><span class="o">.</span><span class="n">all</span><span class="p">()</span><span class="o">.</span><span class="n">order</span><span class="p">(</span><span class="s">&#39;timestamp&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="s">&#39;timestamp &gt;&#39;</span><span class="p">,</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">())</span>
+</code></pre></div>
+
 <p>This is probably the most intuitive way. However according to datastore best practices, it is best to perform your gets/queries via entity key if possible.</p>
 
-<p>Option 2 - Good:</p>
+<h3>Option 2 - Good:</h3>
 
 <p>Use the timestamp as the entity key. This should increase the query speed as GAE is optimised for searching by keys. To make this work I will need to change the timestamp from the datetime property type to a str or long. In doing so I will need to select my timestamp precision and millisecond precision is more than good enough for my use case to avoid duplicate keys:</p>
 
+<div class="highlight"><pre><code class="python"><span class="c"># Entity model</span>
+<span class="k">class</span> <span class="nc">Event</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>    
+  <span class="n">payload</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">StringProperty</span><span class="p">(</span><span class="n">indexed</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+  
+<span class="c"># Query example where I want all entities with timestamps &gt; 100000</span>
+<span class="n">query_key</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Key</span><span class="o">.</span><span class="n">from_path</span><span class="p">(</span><span class="n">Event</span><span class="o">.</span><span class="n">kind</span><span class="p">(),</span> <span class="s">&#39;100000&#39;</span><span class="p">)</span>
+<span class="n">query</span> <span class="o">=</span> <span class="n">Event</span><span class="o">.</span><span class="n">all</span><span class="p">()</span> \
+  <span class="o">.</span><span class="n">order</span><span class="p">(</span><span class="s">&#39;timestamp&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="s">&#39;__key__ &gt;&#39;</span><span class="p">,</span> <span class="n">query_key</span><span class="p">)</span>
+</code></pre></div>
+
 <p>The advantages of this method are that I directly query the key and the only index I need is the default key index.</p>
 
-<p>Option 3 - Great:</p>
+<h3>Option 3 - Great:</h3>
 
 <p>As we can make the payload fixed width, why not store the entire thing in a key? All we would then need to do is fetch the entities key and decode to get all the information we need:</p>
+
+<div class="highlight"><pre><code class="python"><span class="c"># Entity model - no longer requires a body</span>
+<span class="k">class</span> <span class="nc">Event</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+  <span class="k">pass</span>
+    
+<span class="c"># assume our payload is always 50 characters long</span>
+<span class="k">def</span> <span class="nf">encode_key_name</span><span class="p">(</span><span class="n">timestamp</span><span class="p">,</span> <span class="n">payload</span><span class="p">):</span>
+  <span class="n">timestamp</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">timestamp</span><span class="p">)</span><span class="o">.</span><span class="n">zfill</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>    
+  <span class="n">payload</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">payload</span><span class="p">)</span><span class="o">.</span><span class="n">zfill</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span>        
+  <span class="k">return</span> <span class="s">&#39;</span><span class="si">%s</span><span class="s">|</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">timestamp</span><span class="p">,</span> <span class="n">payload</span><span class="p">)</span>
+  
+<span class="c"># Query example where I want all entities with timestamps &gt; 100000</span>
+<span class="n">query_key</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Key</span><span class="o">.</span><span class="n">from_path</span><span class="p">(</span><span class="n">Event</span><span class="o">.</span><span class="n">kind</span><span class="p">(),</span> \                             
+  <span class="n">encode_key_name</span><span class="p">(</span><span class="mi">1000000</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="o">.</span><span class="n">zfill</span><span class="p">(</span><span class="mi">50</span><span class="p">))</span>
+<span class="n">query</span> <span class="o">=</span> <span class="n">Event</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">keys_only</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span> \                
+  <span class="o">.</span><span class="n">order</span><span class="p">(</span><span class="s">&#39;timestamp&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="s">&#39;__key__ &gt;=&#39;</span><span class="p">,</span> <span class="n">query_key</span><span class="p">)</span>
+</code></pre></div>
 
 <p>Now we only need to do a keys_only query which is much cheaper and faster than pulling the whole entity from the datastore.</p>
 
 <p>Caveats:</p>
 
-<p>It’s your responsibility to make sure your data is always a fixed size.
-It might be tricky to perform &gt;= queries instead of &gt; queries depending on the ASCII/UNICODE character precedence.
-Scalability - I group sequences of events under different parents therefore allowing me to know each users sequence of events will not collide with other users.
-When I get around to it I’ll create some stats to get objective evidence that this really is a useful technique. However, subjectively this works well.</p>
+<ul>
+<li>It&#39;s your responsibility to make sure your data is always a fixed size.</li>
+<li>It might be tricky to perform &gt;= queries instead of &gt; queries depending on the ASCII/UNICODE character precedence.</li>
+<li>Scalability - I group sequences of events under different parents therefore allowing me to know each users sequence of events will not collide with other users.</li>
+</ul>
+
+<p>When I get around to it I&#39;ll create some stats to get objective evidence that this really is a useful technique. However, subjectively this works well.</p>
 
 </div>
 

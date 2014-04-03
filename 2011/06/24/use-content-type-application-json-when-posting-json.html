@@ -25,9 +25,15 @@
 <p class="meta">24 Jun 2011</p>
 
 <div class="post">
-<p>If you are sending a JSON POST body to App Engine, make sure you set the Content-Type request header to application/json otherwise the post body will not be decoded correctly on the Google App Engine side.</p>
+<p>If you are sending a <a href="http://www.json.org/">JSON</a> POST body to App Engine, make sure you set the <em>Content-Type</em> request header to <em>application/json</em> otherwise the post body will not be decoded correctly on the Google App Engine side.</p>
 
-<p>Using ASIHTTHttpRequest:</p>
+<p>Using <a href="http://allseeing-i.com/ASIHTTPRequest/How-to-use">ASIHTTHttpRequest</a>:</p>
+
+<div class="highlight"><pre><code class="objective-c"><span class="n">NSURL</span> <span class="o">*</span><span class="n">url</span> <span class="o">=</span> <span class="p">[</span><span class="n">NSURL</span> <span class="n">URLWithString</span><span class="o">:</span><span class="s">@&quot;http://example.com/&quot;</span><span class="p">];</span>
+<span class="n">ASIHTTPRequest</span> <span class="o">*</span><span class="n">request</span> <span class="o">=</span> <span class="p">[</span><span class="n">ASIHTTPRequest</span> <span class="n">requestWithURL</span><span class="o">:</span><span class="n">url</span><span class="p">];</span>
+<span class="p">[</span><span class="n">request</span> <span class="n">addRequestHeader</span><span class="o">:</span><span class="s">@&quot;Content-Type&quot;</span> <span class="n">value</span><span class="o">:</span><span class="s">@&quot;application/json&quot;</span><span class="p">];</span>
+<span class="p">[</span><span class="n">request</span> <span class="n">appendPostData</span><span class="o">:</span><span class="p">[</span><span class="s">@&quot;{</span><span class="se">\&quot;</span><span class="s">count</span><span class="se">\&quot;</span><span class="s"> : 49}&quot;</span> <span class="n">dataUsingEncoding</span><span class="o">:</span><span class="n">NSUTF8StringEncoding</span><span class="p">]];</span>
+</code></pre></div>
 
 </div>
 

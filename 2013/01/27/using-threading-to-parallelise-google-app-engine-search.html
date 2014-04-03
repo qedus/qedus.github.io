@@ -25,13 +25,17 @@
 <p class="meta">27 Jan 2013</p>
 
 <div class="post">
-<p>I ran into a performance/cost bottleneck with some of my code that uses the experimental App Engine Search Service. It currently does not let you asynchronously put documents into its search indexes, therefore I was getting the following display in App Stats when trying to insert 20 documents at a time:</p>
+<p>I ran into a performance/cost bottleneck with some of my code that uses the experimental App Engine <a href="https://developers.google.com/appengine/docs/python/search/">Search Service</a>. It currently does not let you asynchronously put documents into its search indexes, therefore I was getting the following display in App Stats when trying to insert 20 documents at a time:</p>
+
+<p><img src="/images/google-appengine-no-threading.png" alt="Non Threaded Search"></p>
 
 <p>The whole task took over 4 seconds to execute with each document insertion being done sequentially. Note the datastore<em>v3.Put commands also add 20 entities at a time but use ndb.put</em>multi_async() to ensure they only use one RPC. It is executed in milliseconds.</p>
 
-<p>With the python 2.7 runtime I changed my code to use threading.Thread for each of the document insertions and saw a big performance improvement:</p>
+<p>With the python 2.7 runtime I changed my code to use <a href="http://docs.python.org/2/library/threading.html">threading.Thread</a> for each of the document insertions and saw a big performance improvement:</p>
 
-<p>The task now takes under 3 seconds which means I can run with fewer instances which in turn costs me less. Ideally there would be a search.Index(name=’index-name’).put<em>multi</em>async() in the Search Service API but this is the next best thing.</p>
+<p><img src="/images/google-appengine-threading.png" alt="Threaded Search"></p>
+
+<p>The task now takes under 3 seconds which means I can run with fewer instances which in turn costs me less. Ideally there would be a search.Index(name=&#39;index-name&#39;).put<em>multi</em>async() in the Search Service API but this is the next best thing.</p>
 
 </div>
 
