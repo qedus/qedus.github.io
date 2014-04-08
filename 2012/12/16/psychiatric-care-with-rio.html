@@ -25,7 +25,7 @@
 <p class="meta">16 Dec 2012</p>
 
 <div class="post">
-<p>For the several months I have used an <a href="http://en.wikipedia.org/wiki/Electronic_medical_record">Electronic Medical Record</a> (EMR) system called RiO at a Mental Health Trust I have been working at. It covers many sites over a large part of the city and is the largest roll out of an EMR I have used. The system has been running for approximately 5 years and has clinical encounter details of every single patient that has passed through the psychiatric unit since then.</p>
+  <p>For the several months I have used an <a href="http://en.wikipedia.org/wiki/Electronic_medical_record">Electronic Medical Record</a> (EMR) system called RiO at a Mental Health Trust I have been working at. It covers many sites over a large part of the city and is the largest roll out of an EMR I have used. The system has been running for approximately 5 years and has clinical encounter details of every single patient that has passed through the psychiatric unit since then.</p>
 
 <p>From a technical point of view the system is a web app built using ASP. You authenticate with a Smart Card and PIN. The authentication requires a separate proprietary Java program to be run outside the browser. From what I understand, this authentication client means that the RiO is locked into using Windows. Looking at the HTML source I can see that the JavaScript and HTML is definitely not W3C compliant. From the frequent database connection timeouts and subsequent stack trace dumps onto the screen I can tell the front end is connected to a Microsoft SQL Server database.</p>
 
@@ -56,6 +56,20 @@
 <p>RiO is definitely an improvement over paper medical records. However it suffers from lack of ongoing maintenance and refinement meaning that is is painfully inefficient. It is clear just from looking under the surface at the HTML source that the people that coded it were not passionate or take much pride in coding it. I just wish vendor lock in was not so great to allow healthy competition as it is ultimately patients that suffer from inefficient clinical tools.</p>
 
 </div>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+  var disqus_shortname = 'qedus'; // required: replace example with your forum shortname
+
+  /* * * DON'T EDIT BELOW THIS LINE * * */
+  (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
 
 
       <div class="footer">
@@ -66,7 +80,7 @@
         </div>
         <div class="contact">
           <p>
-          <a href="https://github.com/qedus">github.com/qedus</a><br />
+          <a href="https://github.com/qedus">github.com/qedus</a>&nbsp;&nbsp; 
           <a href="https://twitter.com/jongillham">twitter.com/jongillham</a><br />
           </p>
         </div>

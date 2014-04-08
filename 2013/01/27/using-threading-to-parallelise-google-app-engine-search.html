@@ -25,7 +25,7 @@
 <p class="meta">27 Jan 2013</p>
 
 <div class="post">
-<p>I ran into a performance/cost bottleneck with some of my code that uses the experimental App Engine <a href="https://developers.google.com/appengine/docs/python/search/">Search Service</a>. It currently does not let you asynchronously put documents into its search indexes, therefore I was getting the following display in App Stats when trying to insert 20 documents at a time:</p>
+  <p>I ran into a performance/cost bottleneck with some of my code that uses the experimental App Engine <a href="https://developers.google.com/appengine/docs/python/search/">Search Service</a>. It currently does not let you asynchronously put documents into its search indexes, therefore I was getting the following display in App Stats when trying to insert 20 documents at a time:</p>
 
 <p><img src="/images/google-appengine-no-threading.png" alt="Non Threaded Search"></p>
 
@@ -38,6 +38,20 @@
 <p>The task now takes under 3 seconds which means I can run with fewer instances which in turn costs me less. Ideally there would be a search.Index(name=&#39;index-name&#39;).put<em>multi</em>async() in the Search Service API but this is the next best thing.</p>
 
 </div>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+  var disqus_shortname = 'qedus'; // required: replace example with your forum shortname
+
+  /* * * DON'T EDIT BELOW THIS LINE * * */
+  (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
 
 
       <div class="footer">
@@ -48,7 +62,7 @@
         </div>
         <div class="contact">
           <p>
-          <a href="https://github.com/qedus">github.com/qedus</a><br />
+          <a href="https://github.com/qedus">github.com/qedus</a>&nbsp;&nbsp; 
           <a href="https://twitter.com/jongillham">twitter.com/jongillham</a><br />
           </p>
         </div>
