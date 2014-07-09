@@ -1,90 +1,13 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>QED.US</title>
-    <meta name="viewport" content="width=device-width">
+---
+layout: default
+title: QED.US
+---
 
-    <!-- syntax highlighting CSS -->
-    <link rel="stylesheet" href="/css/syntax.css">
-
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="/css/main.css">
-
-  </head>
-  <body>
-
-    <div class="site">
-      <div class="header">
-        <h1 class="title"><a href="/">QED.US</a></h1>
-        <a class="extra" href="/">home</a>
-      </div>
-
-      <div id="home">
+<div id="home">
   <h1>Blog Posts</h1>
   <ul class="posts">
-    
-      <li><span>18 Feb 2014</span> &raquo; <a href="/2014/02/18/bitcoin-lacks-the-properties-of-a-real-currency.html">Bitcoin lacks the properties of a real currency</a></li>
-    
-      <li><span>17 Feb 2014</span> &raquo; <a href="/2014/02/17/how-can-bitcoin-transaction-malleability-be-exploited.html">How can Bitcoin transaction malleability be exploited?</a></li>
-    
-      <li><span>10 Feb 2014</span> &raquo; <a href="/2014/02/10/bitcoin-is-a-fad-supposedly.html">Bitcoin is a fad supposedly</a></li>
-    
-      <li><span>22 Jan 2014</span> &raquo; <a href="/2014/01/22/several-reasons-why-bitcoin-is-not-perfect.html">Several reasons why Bitcoin is not perfect</a></li>
-    
-      <li><span>02 Oct 2013</span> &raquo; <a href="/2013/10/02/the-future-of-city-transport-part-two.html">The future of city transport - Part two</a></li>
-    
-      <li><span>08 Sep 2013</span> &raquo; <a href="/2013/09/08/the-future-of-city-transport-part-one.html">The future of city transport - Part one</a></li>
-    
-      <li><span>27 Jan 2013</span> &raquo; <a href="/2013/01/27/using-threading-to-parallelise-google-app-engine-search.html">Using threading to parallelise Google App Engine Search Service</a></li>
-    
-      <li><span>16 Dec 2012</span> &raquo; <a href="/2012/12/16/psychiatric-care-with-rio.html">Psychiatric care with RiO</a></li>
-    
-      <li><span>11 Nov 2012</span> &raquo; <a href="/2012/11/11/accessing-a-security-enabled-app-engine-dev-server-using-appache-httpclient.html">Accessing a security enabled App Engine dev server using Apache HttpClient</a></li>
-    
-      <li><span>24 Jun 2012</span> &raquo; <a href="/2012/06/24/nhs-as-a-paas.html">NHS as a PaaS</a></li>
-    
-      <li><span>29 Apr 2012</span> &raquo; <a href="/2012/04/29/app-engine-ndb-gotcha-pickleproperty-default-value.html">App Engine NDB gotcha PickleProperty default value</a></li>
-    
-      <li><span>17 Jan 2012</span> &raquo; <a href="/2012/01/17/hospital-porters.html">Hospital porters</a></li>
-    
-      <li><span>23 Dec 2011</span> &raquo; <a href="/2011/12/23/why-is-the-nhs-still-so-reliant-on-paper-patient-notes.html">Why is the NHS still so reliant on paper patient notes?</a></li>
-    
-      <li><span>08 Sep 2011</span> &raquo; <a href="/2011/09/08/app-engine-austerity-the-composite-key.html">App Engine austerity - The composite key</a></li>
-    
-      <li><span>02 Jul 2011</span> &raquo; <a href="/2011/07/02/google-data-centres-have-cancer.html">Google data centres have cancer</a></li>
-    
-      <li><span>24 Jun 2011</span> &raquo; <a href="/2011/06/24/use-content-type-application-json-when-posting-json.html">Use Content-Type "application/json" when posting JSON to Google App Engine</a></li>
-    
+    {% for post in site.posts %}
+      <li><span>{{ post.date | date_to_string }}</span> &raquo; <a href="{{ post.url }}">{{ post.title }}</a></li>
+    {% endfor %}
   </ul>
 </div>
-
-
-      <div class="footer">
-        <div class="contact">
-          <p>
-          Jonathan Gillham
-          </p>
-        </div>
-        <div class="contact">
-          <p>
-          <a href="https://github.com/qedus">github.com/qedus</a>&nbsp;&nbsp; 
-          <a href="https://twitter.com/jongillham">twitter.com/jongillham</a><br />
-          </p>
-        </div>
-      </div>
-    </div>
-
-    <script>
-      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-      ga('create', 'UA-27968952-1', 'qed.us');
-      ga('send', 'pageview');
-
-    </script>
-  </body>
-</html>
