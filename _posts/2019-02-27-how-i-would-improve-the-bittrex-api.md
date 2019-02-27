@@ -7,12 +7,12 @@ tags:
 - apis
 - software
 ---
-The (Bittrex API)[https://bittrex.github.io/api/v1-1] is not bad at all however there are a few things that I would do different with the benefit of having used it extensively in order to make the developer/user experience better. The issues I have come accross are vagule in order of annoyance with the most annoying feature at the top.
+The [Bittrex API](https://bittrex.github.io/api/v1-1) is not bad at all however there are a few things that I would do different with the benefit of having used it extensively in order to make the developer/user experience better. The issues I have come accross are vagule in order of annoyance with the most annoying feature at the top.
 
 ### Don't use SignalR for pushing data to clients
 **Issue:** It isn't that well known and there aren't enough robust clients for it.
 
-**Solution:** Use WebSockets instead with a standardised JSON specification such as the (JSON:API Specification)[https://jsonapi.org/format/#document-jsonapi-object].
+**Solution:** Use WebSockets instead with a standardised JSON specification such as the [JSON:API Specification](https://jsonapi.org/format/#document-jsonapi-object).
 Or better yet use WebSockets with Google Protobuf or similar to cut down on bandwidth, have strongly described endpoint types and allow code autogeneration.
 
 ### Define your SignalR JSON objects
