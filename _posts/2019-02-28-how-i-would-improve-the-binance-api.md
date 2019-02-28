@@ -1,7 +1,7 @@
 ---
 layout: post
 title: How I would improve the Binance API
-date: '2019-02-27T13:00:00+00:00'
+date: '2019-02-28T13:00:00+00:00'
 tags:
 - crytpocurrency
 - apis
