@@ -10,12 +10,12 @@ tags:
 The [Bittrex API](https://bittrex.github.io/api/v1-1) is not bad at all however there are a few things that I would do different with the benefit of having used it extensively in order to make the developer/user experience better. The issues I have come accross are vagule in order of annoyance with the most annoying feature at the top.
 
 ### Don't use SignalR for pushing data to clients
-**Issue:** It isn't that well known and there aren't enough robust clients for it.
+**Issue:** SignalR isn't that well supported outside Microsoft centric environments and there aren't enough robust clients for it in a variety of languages.
 
 **Solution:** Use WebSockets instead with a standardised JSON specification such as the [JSON:API Specification](https://jsonapi.org/format/#document-jsonapi-object).
 Or better yet use WebSockets with Google Protobuf or similar to cut down on bandwidth, have strongly described endpoint types and allow code autogeneration.
 
-### Define your SignalR JSON objects
+### Define your JSON objects that are pushed to the client
 **Issue:** The JSON response from SignalR can't easily take advantage of statically typed languages because you never know what the shape of the returned object will be.
 For example any sort of object can be received from the SignalR endpoint. Below are two examples of objects that can be received from the SignalR stream:
 ```javascript
@@ -79,10 +79,9 @@ For example any sort of object can be received from the SignalR endpoint. Below 
    ]
 }
 ```
-Not knowing the type of object to be returned makes it difficult for statically typed languages to know how to load the JSON into their own structures.
-With the current API you have to manually parse the JSON string in order to discover what type of structure to unmarshal the JSON into.
+In order to parse these objects into a statically typed structure you need to first peak into it to ascertain the object that is returned. Only then can you unmarshal the object into the right structure.
 
-**Solution:** If any object can be recieved from a stream then ensure that the object type is described early on in the JSON structure. For example:
+**Solution:** If any object can be recieved from a stream then ensure that the object type is described early on in the JSON structure using a defined format. For example:
 ```javascript
 {
    "type":"market",
@@ -94,6 +93,10 @@ With the current API you have to manually parse the JSON string in order to disc
 ```
 This would allow a static language to unmarshal the enclosing object to discover that the enclosed `data` object is of `type` "market".
 
-**Issue:** `Nonce` is spelt incorrectly ast `Nounce` in several endpoints.
+**Issue:** `Nonce` is spelt incorrectly as `Nounce` in several endpoints.
 
 **Solution:** Check your spelling.
+
+**Issue:** The nonce from the SignalR stream is embedded in different JSON objects at different locations. This makes it non trivial to extract the nonce from each returned object.
+
+**Solution:** Have a standardised place to put the nonce.
