@@ -93,10 +93,12 @@ In order to parse these objects into a statically typed structure you need to fi
 ```
 This would allow a static language to unmarshal the enclosing object to discover that the enclosed `data` object is of `type` "market".
 
+### Spelling mistakes with endpoint fields
 **Issue:** `Nonce` is spelt incorrectly as `Nounce` in several endpoints.
 
 **Solution:** Check your spelling.
 
+### Inconsistent location of endpoint fields within objects
 **Issue:** The nonce from the SignalR stream is embedded in different JSON objects at different locations. This makes it non trivial to extract the nonce from each returned object.
 
 **Solution:** Have a standardised place to put the nonce.
